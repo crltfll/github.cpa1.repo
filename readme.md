@@ -2,14 +2,14 @@
 
 Final Project is a **Password Manager** that:
 
-- Creates a password that is completely randomized
+- Creates a password that is completely randomized, without any possible words thrown in even in coincidence
 
-- Allows for user customization:
+- Allows for user customization (default is lowercase):
   - a. Uppercase letter inclusion (ABC...Z)
-  - b. Lowercase letter inclusion (abc...z)
-  - c. Number inclusion (123...0)
-  - d. Punctuation/Special character inclusion (.,/ etc.)
-  - e. Length choice
+  - b. Number inclusion (123...0)
+  - c. Punctuation/Special character inclusion (.,/ etc.)
+  - d. Length choice
+
 
 - Password strength checker:
   - Checks the generated password, or a user input password, based on:
