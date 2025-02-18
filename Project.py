@@ -23,8 +23,8 @@ import string
 
 def getStrongPass(length, upper_use = True, num_use = True, spec_use = True):
 
-    letters_lower = string.ascii_letters_lowercase
-    letters_upper = string.ascii_letters_uppercase
+    letters_lower = string.ascii_lowercase
+    letters_upper = string.ascii_uppercase
     numbers = string.digits
     specials = string.punctuation
     
