@@ -29,8 +29,6 @@ def getStrongPass(length, upper_use = True, num_use = True, spec_use = True):
     specials = string.punctuation
     
     pool = letters_lower
-    if lower_use == True:
-        pool += letters_lower
     if upper_use == True:
         pool += letters_upper
     if spec_use == True:
@@ -50,29 +48,29 @@ upper_check = str(input("Would you like to have uppercase letters in your passwo
 while upper_check != 'Y' and num_check != 'N':
     upper_check = str(input("Your input was not Y or N. Please try again.\nWould you like to have numbers in your password?\nType Y for Yes, N for No. "))
 if upper_check == 'Y':
-    upper_check = True
+    upper_use_1 = True
 elif upper_check == 'N':
-    upper_check = False
+    upper_use_1 = False
 
 num_check = str(input("Would you like to have numbers in your password?\nType Y for Yes, N for No. ")).upper()
 while num_check != 'Y' and num_check != 'N':
     num_check = str(input("Your input was not Y or N. Please try again.\nWould you like to have numbers in your password?\nType Y for Yes, N for No. "))
 if num_check == 'Y':
-    num_use1 = True
+    num_use_1 = True
 elif num_check == 'N':
-    num_use1 = False
+    num_use_1 = False
 
 spec_check = str(input("Would you like to have special characters in your password?\nType Y for Yes, N for No. ")).upper()
 while spec_check != 'Y' and spec_check != 'N':
     spec_check = str(input("Your input was not Y or N. Please try again.\nWould you like to have special characters in your password?\nType Y for Yes, N for No. "))
 if spec_check == 'Y':
-    spec_use1 = True
+    spec_use_1 = True
 elif spec_check == 'N':
-    spec_use1 = False
+    spec_use_1 = False
 
 length_inp = int(input("Please type in your desired length of password.\nTip: The longer, the better! "))
 while length_inp <= 0:
     length_inp = int(input("Please type a positive number. "))
 
-password = getStrongPass(length_inp, upper_check, num_check, spec_check)
+password = getStrongPass(length_inp, upper_use_1, num_use_1, spec_use_1)
 print("Your password is: ", password)
