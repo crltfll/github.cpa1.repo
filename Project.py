@@ -111,7 +111,11 @@ __|__]|__|[__ [__ | | ||  ||__/|  \   | __|___|\ ||___|__/|__| | |  ||__/__
             while select_loop != '1' and select_loop != '2' and select_loop != '3' and select_loop != '4' and select_loop != '5' and select_loop != '6':
                 select_loop = input("Invalid input, please try again, and select from 1 through 6. ")
             if select_loop == '2':
-                
+
+
+    elif selection == '4':
+            print('Exiting now')
+            exit()
     
 
 
