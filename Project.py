@@ -16,10 +16,12 @@ Update log:
 (18/02/25)  - Added base function to create passwords
             - Added base output function (asks user to create password based on their customizations/specifications)
 (24/02/25)  - Rewrote code, started on main menu function - work-in-progress
+(28/02/25)  - Added copy to clipboard function, patched main (Now requires pyperclip for this action)
 """
 
-ffrom random import *
+from random import *
 import string
+import pyperclip
 
 def getStrongPass(length, upper_use = True, num_use = True, spec_use = True):
 
@@ -42,11 +44,26 @@ def getStrongPass(length, upper_use = True, num_use = True, spec_use = True):
 
     return password
 
+def savePassword():
+    pass
+
+def viewSavedPass():
+    pass
+
+def copyPass(string):
+    try:
+        pyperclip.copy(string)
+        print("Password saved to clipboard!")
+    except ImportError:
+        print("The module pyperclip needs to be installed to be used here. \nPlease install pyperclip using this command:")
+        print("pip install pyperclip")
+        return None
+
 
 def customizePass():
     print("By default, your password will include lowercase letters.")
     upper_check = str(input("Would you like to have uppercase letters in your password?\nType Y for Yes, N for No. ")).upper()
-    while upper_check != 'Y' and num_check != 'N':
+    while upper_check != 'Y' and upper_check != 'N':
         upper_check = str(input("Your input was not Y or N. Please try again.\nWould you like to have numbers in your password?\nType Y for Yes, N for No. "))
     if upper_check == 'Y':
         upper_use_1 = True
@@ -75,6 +92,7 @@ def customizePass():
     
     password = getStrongPass(length_inp, upper_use_1, num_use_1, spec_use_1)
     print("Your password is: ", password)
+    return password
 
 
 def main():
@@ -104,18 +122,32 @@ __|__]|__|[__ [__ | | ||  ||__/|  \   | __|___|\ ||___|__/|__| | |  ||__/__
         selection = input("Invalid input, please try again, and select from 1 through 4. ")
 
     if selection == '1':
+        generated = customizePass()
         while True:
-            customizePass()
             print(main_menu)
-            select_loop = input("Please select your next action choice. ")
+            select_loop = input("Please select your next action choice. ").strip()
             while select_loop != '1' and select_loop != '2' and select_loop != '3' and select_loop != '4' and select_loop != '5' and select_loop != '6':
                 select_loop = input("Invalid input, please try again, and select from 1 through 6. ")
-            if select_loop == '2':
+            if select_loop == '1':
+                continue
+            elif select_loop == '2':
+                savePassword()
+            elif select_loop == '3':
+                viewSavedPass()
+            elif select_loop == '4':
+                copyPass(generated)
+            elif select_loop == '6':
+                print('Exiting now')
+                exit()
+                break
+            
 
 
     elif selection == '4':
-            print('Exiting now')
+            print('Exiting now.')
             exit()
+            
+
     
 
 
