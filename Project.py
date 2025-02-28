@@ -60,13 +60,13 @@ def copyPass(stringinp):
         return None
 
 def testStrength(stringinp):
-
+    passwordStrength = ["Your password is too weak. Consider making it longer!", "Your password is weak. Consider adding other character types!", "Your password is kind of strong. Make it stronger with other characters!", "Your password is very strong, well done!", "Your password is strong enough!"]
     upcheck = digcheck = specheck = False
     specs = string.punctuation
     if len(stringinp) <= 8:
-        return "Your password is too weak. Consider making it longer!"
+        return print(passwordStrength[0])
     
-    for char in string:
+    for char in stringinp:
         if char.isupper():
             upcheck = True
         elif char.isdigit():
@@ -74,13 +74,13 @@ def testStrength(stringinp):
         elif char in specs:
             specheck = True
     if not (upcheck or digcheck or specheck):
-        return "Your password is weak. Consider adding other character types!"
+        return print(passwordStrength[1])
     if (digcheck or upcheck):
-        return "Your password is kind of strong. Make it stronger with other characters!"
+        return print(passwordStrength[2])
     if (digcheck and upcheck and specheck):
         if len(stringinp) >= 15:
-            return "Your password is very strong, well done!"
-        return "Your password is strong enough!"
+            return print(passwordStrength[3])
+        return print(passwordStrength[4])
         
         
     
