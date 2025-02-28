@@ -16,7 +16,7 @@ Update log:
 (18/02/25)  - Added base function to create passwords
             - Added base output function (asks user to create password based on their customizations/specifications)
 (24/02/25)  - Rewrote code, started on main menu function - work-in-progress
-(28/02/25)  - Added copy to clipboard function, patched main (Now requires pyperclip for this action)
+(28/02/25)  - Added copy to clipboard and tester function, patched main (Now requires pyperclip for this action)
 """
 
 from random import *
@@ -41,7 +41,7 @@ def getStrongPass(length, upper_use = True, num_use = True, spec_use = True):
 
     
     password = ''.join(choice(pool) for char in range(length))
-
+    # Required here: something that rerolls the password variable if a selected customization does not make it to the string
     return password
 
 def savePassword():
@@ -50,14 +50,40 @@ def savePassword():
 def viewSavedPass():
     pass
 
-def copyPass(string):
+def copyPass(stringinp):
     try:
-        pyperclip.copy(string)
+        pyperclip.copy(stringinp)
         print("Password saved to clipboard!")
     except ImportError:
         print("The module pyperclip needs to be installed to be used here. \nPlease install pyperclip using this command:")
         print("pip install pyperclip")
         return None
+
+def testStrength(stringinp):
+
+    upcheck = digcheck = specheck = False
+    specs = string.punctuation
+    if len(stringinp) <= 8:
+        return "Your password is too weak. Consider making it longer!"
+    
+    for char in string:
+        if char.isupper():
+            upcheck = True
+        elif char.isdigit():
+            digcheck = True
+        elif char in specs:
+            specheck = True
+    if not (upcheck or digcheck or specheck):
+        return "Your password is weak. Consider adding other character types!"
+    if (digcheck or upcheck):
+        return "Your password is kind of strong. Make it stronger with other characters!"
+    if (digcheck and upcheck and specheck):
+        if len(stringinp) >= 15:
+            return "Your password is very strong, well done!"
+        return "Your password is strong enough!"
+        
+        
+    
 
 
 def customizePass():
@@ -136,15 +162,17 @@ __|__]|__|[__ [__ | | ||  ||__/|  \   | __|___|\ ||___|__/|__| | |  ||__/__
                 viewSavedPass()
             elif select_loop == '4':
                 copyPass(generated)
+            elif select_loop == '5':
+                testStrength(generated)
             elif select_loop == '6':
-                print('Exiting now')
+                print('Exiting now... Thank you for using Password Generator!')
                 exit()
                 break
             
 
 
     elif selection == '4':
-            print('Exiting now.')
+            print('Exiting now... Thank you for using Password Generator!')
             exit()
             
 
