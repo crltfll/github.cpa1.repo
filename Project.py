@@ -165,7 +165,7 @@ __|__]|__|[__ [__ | | ||  ||__/|  \   | __|___|\ ||___|__/|__| | |  ||__/__
                         5 - Test Password Strength
                         6 - Exit    
     
-    ''' 
+    '''
     print(title_ascii)
     selection = input("Please select from the main menu numbers. ")
     while selection not in {'1', '2', '3', '4'}:
