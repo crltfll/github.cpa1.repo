@@ -17,13 +17,15 @@ Update log:
             - Added base output function (asks user to create password based on their customizations/specifications)
 (24/02/25)  - Rewrote code, started on main menu function - work-in-progress
 (28/02/25)  - Added copy to clipboard and tester function, patched main (Now requires pyperclip for this action)
-(05/03/25)  - Updated the selection screen and menu for better readability
-(05/03/25)  - Adding a password feature to protect the user's saved passwords - W.I.P.
+(05/03/25)  - Updated the selection and menu screen for better readability
+(05/03/25)  - Added a saved password function to save the password data within a seperate file (Requires os for this action)- W.I.P.
+(05/03/25)  - Added a password feature to protect the user's saved passwords - W.I.P.
 """
 
 from random import *
 import string
 import pyperclip
+import os
 
 def getStrongPass(length, upper_use = True, num_use = True, spec_use = True):
 
@@ -46,8 +48,21 @@ def getStrongPass(length, upper_use = True, num_use = True, spec_use = True):
     # Required here: something that rerolls the password variable if a selected customization does not make it to the string
     return password
 
-def savePassword():
-    pass
+def savePassword(password):
+    file_path = 'Password list.txt'
+
+    if os.path.exists(file_path):
+        with open(file_path, 'a') as file:
+            file.write("\n" + password)
+        print("Password has been saved")
+        
+    else:
+        with open('Password list.txt', 'x') as file:
+            file.write(password)
+    
+    input("Do you wish to continue?")
+    main()
+    
 
 def viewSavedPass():
     masterpassword = "password123" #prototype password
@@ -72,7 +87,6 @@ def viewSavedPass():
             print("Incorrect password! Please try again...")
             continue
 
-    pass
 
 def copyPass(stringinp):
     try:
@@ -181,7 +195,7 @@ __|__]|__|[__ [__ | | ||  ||__/|  \   | __|___|\ ||___|__/|__| | |  ||__/__
             if select_loop == '1':
                 continue
             elif select_loop == '2':
-                savePassword()
+                savePassword(generated)
             elif select_loop == '3':
                 viewSavedPass()
             elif select_loop == '4':
@@ -191,7 +205,7 @@ __|__]|__|[__ [__ | | ||  ||__/|  \   | __|___|\ ||___|__/|__| | |  ||__/__
             elif select_loop == '6':
                 print('Exiting now... Thank you for using Password Generator!')
                 exit()
-                break
+
     elif selection == '2':
             viewSavedPass()            
     elif selection == '3':
@@ -199,7 +213,6 @@ __|__]|__|[__ [__ | | ||  ||__/|  \   | __|___|\ ||___|__/|__| | |  ||__/__
     elif selection == '4':
             print('Exiting now... Thank you for using Password Generator!')
             exit()
-
 
     # print(title_ascii)
     # selection = input("Please select from the main menu numbers. ")
