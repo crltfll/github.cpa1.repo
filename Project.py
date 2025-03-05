@@ -17,7 +17,7 @@ Update log:
             - Added base output function (asks user to create password based on their customizations/specifications)
 (24/02/25)  - Rewrote code, started on main menu function - work-in-progress
 (28/02/25)  - Added copy to clipboard and tester function, patched main (Now requires pyperclip for this action)
-(05/03/25)  - Updated the selection screen and menu by using switch cases to improve efficiency and better readability
+(05/03/25)  - Updated the selection screen and menu for better readability
 (05/03/25)  - Adding a password feature to protect the user's saved passwords - W.I.P.
 """
 
@@ -165,45 +165,78 @@ __|__]|__|[__ [__ | | ||  ||__/|  \   | __|___|\ ||___|__/|__| | |  ||__/__
                         5 - Test Password Strength
                         6 - Exit    
     
-    '''
+    ''' 
     print(title_ascii)
     selection = input("Please select from the main menu numbers. ")
-    
-    match selection:
-        case '1':
-            generated = customizePass()
-            while True:
-                print(main_menu)
-                select_loop = input("Please select your next action choice. ").strip()
-                match select_loop:
-                    case '1':
-                        continue
-                    case '2':
-                        savePassword()
-                    case '3':
-                        viewSavedPass()
-                    case '4':
-                        copyPass(generated)
-                    case '5':
-                        testStrength(generated)
-                    case '6':
-                        print('Exiting now... Thank you for using Password Generator!')
-                        exit()
-                        break
-                    case _:
-                        select_loop = input("Invalid input, please try again, and select from 1 through 6. ")
-                
-        case '2':
-            viewSavedPass()
-        case '3':
-            pass
-        case '4':
+    while selection not in {'1', '2', '3', '4'}:
+        selection = input("Invalid input, please try again, and select from 1 through 4. ")
+
+    if selection == '1':
+        generated = customizePass()
+        while True:
+            print(main_menu)
+            select_loop = input("Please select your next action choice. ").strip()
+            while select_loop not in {'1', '2', '3', '4', '5', '6'}:
+                select_loop = input("Invalid input, please try again, and select from 1 through 6. ")
+            if select_loop == '1':
+                continue
+            elif select_loop == '2':
+                savePassword()
+            elif select_loop == '3':
+                viewSavedPass()
+            elif select_loop == '4':
+                copyPass(generated)
+            elif select_loop == '5':
+                testStrength(generated)
+            elif select_loop == '6':
+                print('Exiting now... Thank you for using Password Generator!')
+                exit()
+                break
+    elif selection == '2':
+            viewSavedPass()            
+    elif selection == '3':
+            testStrength(generated)
+    elif selection == '4':
             print('Exiting now... Thank you for using Password Generator!')
             exit()
-        case _:
-            selection = input("Invalid input, please try again, and select from 1 through 4. ")
-            main()
+
+    # print(title_ascii)
+    # selection = input("Please select from the main menu numbers. ")
     
+    # match selection:
+    #     case '1':
+    #         generated = customizePass()
+    #         while True:
+    #             print(main_menu)
+    #             select_loop = input("Please select your next action choice. ").strip()
+    #             match select_loop:
+    #                 case '1':
+    #                     continue
+    #                 case '2':
+    #                     savePassword()
+    #                 case '3':
+    #                     viewSavedPass()
+    #                 case '4':
+    #                     copyPass(generated)
+    #                 case '5':
+    #                     testStrength(generated)
+    #                 case '6':
+    #                     print('Exiting now... Thank you for using Password Generator!')
+    #                     exit()
+    #                     break
+    #                 case _:
+    #                     select_loop = input("Invalid input, please try again, and select from 1 through 6. ")
+                
+    #     case '2':
+    #         viewSavedPass()
+    #     case '3':
+    #         pass
+    #     case '4':
+    #         print('Exiting now... Thank you for using Password Generator!')
+    #         exit()
+    #     case _:
+    #         selection = input("Invalid input, please try again, and select from 1 through 4. ")
+    #         main()
 
 
 
