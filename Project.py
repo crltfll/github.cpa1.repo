@@ -200,6 +200,7 @@ __|__]|__|[__ [__ | | ||  ||__/|  \   | __|___|\ ||___|__/|__| | |  ||__/__
             print('Exiting now... Thank you for using Password Generator!')
             exit()
 
+
     # print(title_ascii)
     # selection = input("Please select from the main menu numbers. ")
     
