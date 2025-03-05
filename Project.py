@@ -159,10 +159,11 @@ __|__]|__|[__ [__ | | ||  ||__/|  \   | __|___|\ ||___|__/|__| | |  ||__/__
     main_menu = r'''
                         1 - Generate Custom Pass
                         2 - Save Password
-                        3 - View Saved Passwords
-                        4 - Copy Password to Clipboard
-                        5 - Test Password Strength
-                        6 - Exit    
+                        3 - Set Master Password
+                        4 - View Saved Passwords
+                        5 - Copy Password to Clipboard
+                        6 - Test Password Strength
+                        7 - Exit    
     '''
     
     generated = None
@@ -183,12 +184,15 @@ __|__]|__|[__ [__ | | ||  ||__/|  \   | __|___|\ ||___|__/|__| | |  ||__/__
                 elif select_loop == '2' and generated:
                     savePassword(generated)
                 elif select_loop == '3':
+                    # masterpassword()
+                    pass
+                elif select_loop == '4':
                     viewSavedPass()
-                elif select_loop == '4' and generated:
-                    copyPass(generated)
                 elif select_loop == '5' and generated:
+                    copyPass(generated)
+                elif select_loop == '6' and generated:
                     testStrength(generated)
-                elif select_loop == '6':
+                elif select_loop == '7':
                     print('Exiting now... Thank you for using Password Generator!')
                     return
                 elif not generated:
