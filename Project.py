@@ -21,6 +21,8 @@ Update log:
             - Added a saved password function to save the password data within a separate file (Requires os for this action)- W.I.P.
             - Added a password feature to protect the user's saved passwords - W.I.P.
             - Cleaned up code comments and previous iterations of updates done today
+(07/03/25)  - Redid the password generator function to ensure selections are met and shuffled accordingly to avoid predictable patterns
+            - Added docstrings to clarify the functionality of each codeblock/function
 """
 
 from random import *
@@ -29,10 +31,37 @@ import pyperclip
 import os
 
 def getStrongPass(length, upper_use=True, num_use=True, spec_use=True):
+    '''
+    This function is the main password generator of this program, which accepts various inputs from the main menu.
+    length corresponds to the password length; upper_use corresponds to the choice of the user to use UPPERCASE
+    num_use corresponds to the choice of the user to use 1234...; and spec_use corresponds to punctuation and special characters.
+    Now ensures that choices made appear in the generated password.
+    '''
+    
     letters_lower = string.ascii_lowercase
     letters_upper = string.ascii_uppercase
     numbers = string.digits
     specials = string.punctuation
+    
+    
+    if length < 1:
+        return "Password length must be at least 1"
+    
+    password = ''
+    
+    if upper_use and length > len(password):
+        password += choice(letters_upper)
+    
+    if num_use and length > len(password):
+        password += choice(numbers)
+    
+    if spec_use and length > len(password):
+        password += choice(specials)
+    
+    
+    if length > len(password):
+        password += choice(letters_lower)
+    
     
     pool = letters_lower
     if upper_use:
@@ -42,10 +71,20 @@ def getStrongPass(length, upper_use=True, num_use=True, spec_use=True):
     if spec_use:
         pool += specials
     
-    password = ''.join(choice(pool) for _ in range(length))
-    return password
+    remaining_length = length - len(password)
+    if remaining_length > 0:
+        password += ''.join(choice(pool) for _ in range(remaining_length))
+    
+    password_list = list(password)
+    shuffle(password_list)
+    shuffled_password = ''.join(password_list)
+    
+    return shuffled_password
 
 def savePassword(password):
+    '''
+    Saves password to a text file, currently very bare-bones, and will be redone soon.
+    '''
     file_path = 'Password list.txt'
     try:
         with open(file_path, 'a') as file:
@@ -59,6 +98,9 @@ def savePassword(password):
     main()
 
 def viewSavedPass():
+    '''
+    Allows viewing of the saved file mentioned, alongside savePassword will be revamped to ensure encryption.
+    '''
     masterpassword = "password123"  # Note: In a real application, this should be more secure
     while True:
         login = input("Please input master password: ")
@@ -78,6 +120,9 @@ def viewSavedPass():
             print("Incorrect password! Please try again...")
 
 def copyPass(stringinp):
+    '''
+    Using the pyperclip module, this function copies and allows for immediate use of the password to the user through clipboard copies.
+    '''
     try:
         pyperclip.copy(stringinp)
         print("Password saved to clipboard!")
@@ -86,6 +131,9 @@ def copyPass(stringinp):
         print("pip install pyperclip")
 
 def testStrength(stringinp):
+    '''
+    Based on small-time criteria, this function checks the strength of the generated password.
+    '''
     passwordStrength = [
         "Your password is too weak. Consider making it longer!",
         "Your password is weak. Consider adding other character types!",
@@ -119,6 +167,9 @@ def testStrength(stringinp):
             print(passwordStrength[4])
 
 def customizePass():
+    '''
+    This is the user-customization function that plays whenever a user wants to generate a password.
+    '''
     print("By default, your password will include lowercase letters.")
     
     def get_yes_no_input(prompt):
