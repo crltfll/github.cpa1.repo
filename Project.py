@@ -23,12 +23,26 @@ Update log:
             - Cleaned up code comments and previous iterations of updates done today
 (07/03/25)  - Redid the password generator function to ensure selections are met and shuffled accordingly to avoid predictable patterns
             - Added docstrings to clarify the functionality of each codeblock/function
+(14/03/25)  - Added the following functions: 
+                clearScreen() adapted from GeeksforGeeks
+                displayHelp(), helper display function
+            - Redid main(), split to have insidemain() as the after title screen main menu
+           
 """
 
 from random import *
 import string
 import pyperclip
 import os
+
+def clearScreen():
+    '''
+    This function is referenced from the internet, and this effectively works as C's system('cls'). It clears the terminal of prior text.
+    '''
+    if os.name == 'nt':
+        _ = os.system('cls')
+    else:
+        _ = os.system('clear')
 
 def getStrongPass(length, upper_use=True, num_use=True, spec_use=True):
     '''
@@ -94,8 +108,8 @@ def savePassword(password):
         with open(file_path, 'w') as file:
             file.write(password)
     
-    input("Do you want to continue...")
-    main()
+    input("Press any key...")
+    insidemain()
 
 def viewSavedPass():
     '''
@@ -196,6 +210,65 @@ def customizePass():
     print("Your password is: ", password)
     return password
 
+def displayHelp():
+    print(
+        r"""
+        ----------------------------------Title Menu Options----------------------------------
+        Generate Custom Pass - generates your password based on your selections later seen.
+        View Saved Passwords - fetches your encrypted passwords made and generated here.
+        Test Password Strength - tests the strength of your generated password.
+        ----------------------------------Main Menu Options-----------------------------------
+        Save Password - saves generated passwords and encrypts them.
+        Set Master Password - sets the master password as the current generated password.
+        Copy Password to Clipboard - Copies your password to the clipboard, use Ctrl+V to paste.
+        """
+    )
+    input("\n Please enter any key to return...")
+    if generated:
+        insidemain()
+    else:
+        main()
+    
+
+def insidemain():
+     main_menu = r'''
+                        1 - Generate Custom Pass
+                        2 - Save Password
+                        3 - Set Master Password
+                        4 - View Saved Passwords
+                        5 - Copy Password to Clipboard
+                        6 - Test Password Strength
+                        7 - Help
+                        8 - Exit    
+    '''
+     while True:
+                
+        print(main_menu)
+        select_loop = input("Please select your next action choice. ").strip()
+                
+        if select_loop == '1':
+            clearScreen()
+            
+            generated = customizePass()
+        elif select_loop == '2' and generated:
+            savePassword(generated)
+        elif select_loop == '3':
+             # masterpassword()
+            pass
+        elif select_loop == '4':
+            viewSavedPass()
+        elif select_loop == '5' and generated:
+            copyPass(generated)
+        elif select_loop == '6' and generated:
+           testStrength(generated)
+        elif select_loop == '7':
+            displayHelp()
+        elif select_loop == '8':
+            print('Exiting now... Thank you for using Password Generator!')
+            exit()
+        elif not generated:
+            print("Please generate a password first!")
+
 def main():
     title_ascii = r"""
   ___ _____________ _ ____________    _________  ________________________   
@@ -208,17 +281,9 @@ __|__]|__|[__ [__ | | ||  ||__/|  \   | __|___|\ ||___|__/|__| | |  ||__/__
                         4 - Help
                         5 - Exit
  """
-    main_menu = r'''
-                        1 - Generate Custom Pass
-                        2 - Save Password
-                        3 - Set Master Password
-                        4 - View Saved Passwords
-                        5 - Copy Password to Clipboard
-                        6 - Test Password Strength
-                        7 - Help
-                        8 - Exit    
-    '''
-    
+   
+    clearScreen()
+    global generated 
     generated = None
     
     while True:
@@ -226,30 +291,9 @@ __|__]|__|[__ [__ | | ||  ||__/|  \   | __|___|\ ||___|__/|__| | |  ||__/__
         selection = input("Please select from the main menu numbers. ")
         
         if selection == '1':
+            clearScreen()
             generated = customizePass()
-            
-            while True:
-                print(main_menu)
-                select_loop = input("Please select your next action choice. ").strip()
-                
-                if select_loop == '1':
-                    generated = customizePass()
-                elif select_loop == '2' and generated:
-                    savePassword(generated)
-                elif select_loop == '3':
-                    # masterpassword()
-                    pass
-                elif select_loop == '4':
-                    viewSavedPass()
-                elif select_loop == '5' and generated:
-                    copyPass(generated)
-                elif select_loop == '6' and generated:
-                    testStrength(generated)
-                elif select_loop == '8':
-                    print('Exiting now... Thank you for using Password Generator!')
-                    return
-                elif not generated:
-                    print("Please generate a password first!")
+            insidemain()
         
         elif selection == '2':
             viewSavedPass()
@@ -258,11 +302,14 @@ __|__]|__|[__ [__ | | ||  ||__/|  \   | __|___|\ ||___|__/|__| | |  ||__/__
                 testStrength(generated)
             else:
                 print("Please generate a password first!")
+        elif selection == '4':
+            clearScreen()
+            displayHelp()
         elif selection == '5':
             print('Exiting now... Thank you for using Password Generator!')
-            return
+            exit()
         else:
-            print("Invalid input, please select from 1 through 4.")
+            print("Invalid input, please select from 1 through 5.")
 
 if __name__ == "__main__":
     main()
