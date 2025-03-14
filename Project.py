@@ -205,7 +205,8 @@ __|__]|__|[__ [__ | | ||  ||__/|  \   | __|___|\ ||___|__/|__| | |  ||__/__
                         1 - Generate Custom Pass
                         2 - View Saved Passwords
                         3 - Test Password Strength
-                        4 - Exit
+                        4 - Help
+                        5 - Exit
  """
     main_menu = r'''
                         1 - Generate Custom Pass
@@ -214,7 +215,8 @@ __|__]|__|[__ [__ | | ||  ||__/|  \   | __|___|\ ||___|__/|__| | |  ||__/__
                         4 - View Saved Passwords
                         5 - Copy Password to Clipboard
                         6 - Test Password Strength
-                        7 - Exit    
+                        7 - Help
+                        8 - Exit    
     '''
     
     generated = None
@@ -243,7 +245,7 @@ __|__]|__|[__ [__ | | ||  ||__/|  \   | __|___|\ ||___|__/|__| | |  ||__/__
                     copyPass(generated)
                 elif select_loop == '6' and generated:
                     testStrength(generated)
-                elif select_loop == '7':
+                elif select_loop == '8':
                     print('Exiting now... Thank you for using Password Generator!')
                     return
                 elif not generated:
@@ -256,7 +258,7 @@ __|__]|__|[__ [__ | | ||  ||__/|  \   | __|___|\ ||___|__/|__| | |  ||__/__
                 testStrength(generated)
             else:
                 print("Please generate a password first!")
-        elif selection == '4':
+        elif selection == '5':
             print('Exiting now... Thank you for using Password Generator!')
             return
         else:
