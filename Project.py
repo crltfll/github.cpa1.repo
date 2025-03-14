@@ -227,10 +227,12 @@ def displayHelp():
     if generated:
         insidemain()
     else:
+        clearScreen()
         main()
     
 
 def insidemain():
+     global generated
      main_menu = r'''
                         1 - Generate Custom Pass
                         2 - Save Password
@@ -248,7 +250,6 @@ def insidemain():
                 
         if select_loop == '1':
             clearScreen()
-            
             generated = customizePass()
         elif select_loop == '2' and generated:
             savePassword(generated)
@@ -256,6 +257,7 @@ def insidemain():
              # masterpassword()
             pass
         elif select_loop == '4':
+            clearScreen()
             viewSavedPass()
         elif select_loop == '5' and generated:
             copyPass(generated)
@@ -294,8 +296,8 @@ __|__]|__|[__ [__ | | ||  ||__/|  \   | __|___|\ ||___|__/|__| | |  ||__/__
             clearScreen()
             generated = customizePass()
             insidemain()
-        
         elif selection == '2':
+            clearScreen()
             viewSavedPass()
         elif selection == '3':
             if generated:
