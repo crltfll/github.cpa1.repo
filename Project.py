@@ -31,6 +31,8 @@ Update log:
             - Updated viewSavedPass() that utilizes a generated password as the masterpassword.
             - Prevents unauthorized access
             - A convient way to access list if the masterpassword is not setuppeds
+(18/03/25)  - Updated the masterpassword() to be more interactive with the user
+            - Updated the viewSavedPass() to use the masterpassword()
            
 """
 
@@ -119,9 +121,9 @@ def masterpassword(password):
     '''
     Sets a password to the masterpassword to access the txt file
     '''
-    print("Do you wish to save this as your master password?\nWARNING: Make sure to save it")
+    
     while True:
-        mresponse = input().upper()
+        mresponse = input("Do you wish to save this as your master password?\nWARNING: Make sure to save it ").upper()
 
         if mresponse == 'Y':
             file_path = 'Password list.txt'
@@ -139,6 +141,8 @@ def masterpassword(password):
                     file.writelines(new_content)
                 
                 print("Master password updated successfully!")
+                input("Press Enter to continue...")
+                return
             except:
                 print("Invalid response!")
                         
@@ -160,35 +164,75 @@ def viewSavedPass():
         with open('Password list.txt', 'r') as file:
             first_line = file.readline(1)
             if first_line != '\n':
-                masterpassword = first_line
+                masterpwd = first_line
             else:
-                masterpassword = False
+                masterpwd = False
                 
 
         while True:
-            if masterpassword == False:
+            if masterpwd == False:
                 print("WARNING! FILE UNPROTECTED")
                 with open('Password list.txt', 'r') as file:
                     saved_passwords = file.readlines()
                     print("Here are your saved passwords:")
+                    options = []
                     for i, pwd in enumerate(saved_passwords, 1):
                         print(f"{i}) {pwd.strip()}")
-                
-                print("Set Masterpassword\nReturn")
-                view_response = input("")
-                
-                return
+                        options.append((i, pwd.strip()))
+                input("Press Enter to continue...")
+                print("\n1) Set Masterpassword\n2) Return")
+
+                while True:
+                    simpchoice = input("\n")
+                    if simpchoice == '1':
+                        while True:
+                            print(options)
+                            view_response = int(input(f"\nEnter a number between 2 and {i} to set your new masterpassword: "))
+                            if 1 == view_response:
+                                print("The first line is the masterpassword. Please pick again")
+                            elif 1 < view_response and view_response <= len(saved_passwords):
+                                password = str(options[view_response][1])
+                                masterpassword(password)
+                                return                        
+                            else:
+                                print("Invalid choice. Please try again.")
+                    elif simpchoice == '2':
+                        return
+                    else:
+                        print("Invalid input! Please pick again")
+                    
 
             login = input("Please input master password: ")
-            if login == masterpassword:
+            if login == masterpwd:
                 with open('Password list.txt', 'r') as file:
                     saved_passwords = file.readlines()
                     print("Here are your saved passwords:")
+                    options = []
                     for i, pwd in enumerate(saved_passwords, 1):
                         print(f"{i}) {pwd.strip()}")
+                        options.append((i, pwd.strip()))
                 
                 input("Press Enter to continue...")
-                return
+                print("\n1) Set Masterpassword\n2) Return")
+
+                while True:
+                    simpchoice = input("\n")
+                    if simpchoice == '1':
+                        while True:
+                            print(options)
+                            view_response = int(input(f"\nEnter a number between 2 and {i} to set your new masterpassword: "))
+                            if 1 == view_response:
+                                print("The first line is the masterpassword. Please pick again")
+                            elif 1 < view_response and view_response <= len(saved_passwords):
+                                password = str(options[view_response][1])
+                                masterpassword(password)
+                                return                        
+                            else:
+                                print("Invalid choice. Please try again.")    
+                    elif simpchoice == '2':
+                        return
+                    else:
+                        print("Invalid input! Please pick again")
             else:
                 print("Incorrect password! Please try again...")
     except FileNotFoundError:
