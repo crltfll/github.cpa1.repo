@@ -27,6 +27,10 @@ Update log:
                 clearScreen() adapted from GeeksforGeeks
                 displayHelp(), helper display function
             - Redid main(), split to have insidemain() as the after title screen main menu
+(17/03/25)  - Added the function masterpassword() - W.I.P.
+            - Updated viewSavedPass() that utilizes a generated password as the masterpassword.
+            - Prevents unauthorized access
+            - A convient way to access list if the masterpassword is not setuppeds
            
 """
 
@@ -106,32 +110,90 @@ def savePassword(password):
         print("Password has been saved")
     except IOError:
         with open(file_path, 'w') as file:
-            file.write(password)
+            file.write(f"\n{password}")
     
     input("Press any key...")
     insidemain()
+
+def masterpassword(password):
+    '''
+    Sets a password to the masterpassword to access the txt file
+    '''
+    print("Do you wish to save this as your master password?\nWARNING: Make sure to save it")
+    while True:
+        mresponse = input().upper()
+
+        if mresponse == 'Y':
+            file_path = 'Password list.txt'
+            try:
+                with open(file_path, 'r') as file:
+                    masterchecker = file.readlines()
+                
+                filtered_lines = []
+                for line in masterchecker:
+                    if line.strip() != password:
+                        filtered_lines += line
+                new_content = [f"{password}\n"] + filtered_lines
+                
+                with open(file_path, 'w') as file:
+                    file.writelines(new_content)
+                
+                print("Master password updated successfully!")
+            except:
+                print("Invalid response!")
+                        
+            
+            input("Press any key...")        
+        elif mresponse == 'N':
+            break
+        else:
+            print("Invalid response")
+    insidemain()
+
+            
 
 def viewSavedPass():
     '''
     Allows viewing of the saved file mentioned, alongside savePassword will be revamped to ensure encryption.
     '''
-    masterpassword = "password123"  # Note: In a real application, this should be more secure
-    while True:
-        login = input("Please input master password: ")
-        if login == masterpassword:
-            try:
+    try:
+        with open('Password list.txt', 'r') as file:
+            first_line = file.readline(1)
+            if first_line != '\n':
+                masterpassword = first_line
+            else:
+                masterpassword = False
+                
+
+        while True:
+            if masterpassword == False:
+                print("WARNING! FILE UNPROTECTED")
                 with open('Password list.txt', 'r') as file:
                     saved_passwords = file.readlines()
                     print("Here are your saved passwords:")
                     for i, pwd in enumerate(saved_passwords, 1):
                         print(f"{i}) {pwd.strip()}")
-            except FileNotFoundError:
-                print("No saved passwords found.")
-            
-            input("Press Enter to continue...")
-            return
-        else:
-            print("Incorrect password! Please try again...")
+                
+                print("Set Masterpassword\nReturn")
+                view_response = input("")
+                
+                return
+
+            login = input("Please input master password: ")
+            if login == masterpassword:
+                with open('Password list.txt', 'r') as file:
+                    saved_passwords = file.readlines()
+                    print("Here are your saved passwords:")
+                    for i, pwd in enumerate(saved_passwords, 1):
+                        print(f"{i}) {pwd.strip()}")
+                
+                input("Press Enter to continue...")
+                return
+            else:
+                print("Incorrect password! Please try again...")
+    except FileNotFoundError:
+        print("No saved passwords found.")
+
 
 def copyPass(stringinp):
     '''
@@ -254,8 +316,7 @@ def insidemain():
         elif select_loop == '2' and generated:
             savePassword(generated)
         elif select_loop == '3':
-             # masterpassword()
-            pass
+            masterpassword(generated)
         elif select_loop == '4':
             clearScreen()
             viewSavedPass()
