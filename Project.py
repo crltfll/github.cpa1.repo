@@ -140,7 +140,7 @@ def masterpassword(password):
                 
                 print("Master password updated successfully!")
             except:
-                print("FUCK! IT DIDN'T WORK")
+                print("Invalid response!")
                         
             
             input("Press any key...")        
