@@ -214,7 +214,7 @@ def viewSavedPass():
                 
                 if login == master_pwd:
                     print("Authentication successful!")
-                    show_passwords_and_options(all_passwords)
+                    showPassOpt(all_passwords)
                     return
                 else:
                     attempt_count += 1
