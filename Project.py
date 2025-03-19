@@ -475,16 +475,25 @@ def insidemain():
             generated = customizePass()
         elif select_loop == '2' and generated:
             savePassword(generated)
+            input("Press Enter to continue...")
+            clearScreen()
         elif select_loop == '3':
             masterpassword(generated)
+            input("Press Enter to continue...")
+            clearScreen()
         elif select_loop == '4':
             clearScreen()
             viewSavedPass()
         elif select_loop == '5' and generated:
             copyPass(generated)
+            input("Press Enter to continue...")
+            clearScreen()
         elif select_loop == '6' and generated:
            testStrength(generated)
+           input("Press Enter to continue...")
+           clearScreen()
         elif select_loop == '7':
+            clearScreen()
             displayHelp()
         elif select_loop == '8':
             print('Exiting now... Thank you for using Password Generator!')
