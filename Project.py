@@ -36,9 +36,13 @@ Update log:
 (18/03/25)  - fixed the masterpassword() and viewSavedPass()-related errors; made try-except blocks to handle exceptions
             - added helperfunction for viewSavedPass(): showPassOpt() for readability and efficiency
 (19/03/25)  - added cryptography module Fernet for encryptions and decryptions; fixes outlined below
-            - helper functions genKey and loadKey made for key generation and loading at every single time the program opens
-            - helper functions encryptPass and decryptPass for encryption and decryption, respectively
-            - savePassword, viewSavedPass, and masterpassword functions modified to include helper functions' outputs
+            - helper functions genKey() and loadKey() made for key generation and loading at every single time the program opens
+            - helper functions encryptPass() and decryptPass() for encryption and decryption, respectively
+            - helper function keyChecker() to make sure genKey() and loadKey() are used
+            - savePassword(), viewSavedPass(), and masterpassword() functions modified to include helper functions' outputs
+            - included showPassOpt() as the function needing encryption/decryption helper functions
+            - Updated help display screen to include installer instructions for modules and libraries needed
+
            
 """
 
@@ -262,7 +266,7 @@ def viewSavedPass():
             while attempt_count < max_attempts:
                 login = input("Please input master password: ")
                 
-                if login == master_pwd:
+                if login == (master_pwd, key):
                     print("Authentication successful!")
                     showPassOpt(all_passwords)
                     return
@@ -284,9 +288,10 @@ def showPassOpt(all_passwords):
     '''
     Helper function to display passwords and present options after successful authentication.
     '''
+    key = loadKey()
     print("\nHere are your saved passwords:")
     
-    # Display passwords with indices
+    # Display passwords with indexed nums
     for i, pwd in enumerate(all_passwords):
         # For the first password (master password), add a label
         if i == 0 and pwd != "NO_MASTER_PASSWORD":
@@ -294,7 +299,11 @@ def showPassOpt(all_passwords):
         elif i == 0 and pwd == "NO_MASTER_PASSWORD":
             print(f"{i+1}) No master password set")
         else:
-            print(f"{i+1}) {pwd}")
+            try:
+                decrypted_pwd = decryptPass(pwd, key)
+                print(f"{i+1}) {decrypted_pwd}")
+            except Exception:
+                print(f"{i+1}) [Encrypted]")
     
     print("\n1) Set New Master Password")
     print("2) Return to Main Menu")
@@ -409,6 +418,16 @@ def customizePass():
     print("Your password is: ", password)
     return password
 
+def keyChecker():
+    '''
+    Checks if the encryption key exists and generates a new one if it doesn't.
+    '''
+    try:
+        loadKey()
+    except FileNotFoundError:
+        print("Encryption key not found. Generating new key...")
+        genKey()
+
 def displayHelp():
     print(
         r"""
@@ -420,6 +439,10 @@ def displayHelp():
         Save Password - saves generated passwords and encrypts them.
         Set Master Password - sets the master password as the current generated password.
         Copy Password to Clipboard - Copies your password to the clipboard, use Ctrl+V to paste.
+        ------------------------------------Prerequisites-------------------------------------
+        In running this program, please run the following codes on your terminal:
+        pip install cryptography
+        pip install pyperclip
         """
     )
     input("\n Please enter any key to return...")
@@ -483,6 +506,7 @@ __|__]|__|[__ [__ | | ||  ||__/|  \   | __|___|\ ||___|__/|__| | |  ||__/__
  """
    
     clearScreen()
+    keyChecker()
     global generated 
     generated = None
     
