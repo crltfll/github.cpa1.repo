@@ -290,20 +290,30 @@ def showPassOpt(all_passwords):
     '''
     key = loadKey()
     print("\nHere are your saved passwords:")
+
+    decrypted_passlist =[] 
     
     # Display passwords with indexed nums
     for i, pwd in enumerate(all_passwords):
         # For the first password (master password), add a label
         if i == 0 and pwd != "NO_MASTER_PASSWORD":
-            print(f"{i+1}) {pwd} (MASTER PASSWORD)")
+            try:
+                decrypted_pwd = decryptPass(pwd, key)
+                print(f"{i+1}) {pwd} (MASTER PASSWORD)")
+                decrypted_passlist.append(decrypted_pwd)
+            except Exception:
+                print(f"{i+1}) {pwd} (MASTER PASSWORD)")
         elif i == 0 and pwd == "NO_MASTER_PASSWORD":
             print(f"{i+1}) No master password set")
+            decrypted_passlist.append(decrypted_pwd)
         else:
             try:
                 decrypted_pwd = decryptPass(pwd, key)
                 print(f"{i+1}) {decrypted_pwd}")
+                decrypted_passlist.append(decrypted_pwd)
             except Exception:
                 print(f"{i+1}) [Encrypted]")
+                decrypted_passlist.append(decrypted_pwd)
     
     print("\n1) Set New Master Password")
     print("2) Return to Main Menu")
@@ -535,6 +545,8 @@ __|__]|__|[__ [__ | | ||  ||__/|  \   | __|___|\ ||___|__/|__| | |  ||__/__
                 testStrength(generated)
             else:
                 print("Please generate a password first!")
+                input("Press any key to continue...")
+                clearScreen()
         elif selection == '4':
             clearScreen()
             displayHelp()
