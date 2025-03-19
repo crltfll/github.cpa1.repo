@@ -299,7 +299,7 @@ def showPassOpt(all_passwords):
         if i == 0 and pwd != "NO_MASTER_PASSWORD":
             try:
                 decrypted_pwd = decryptPass(pwd, key)
-                print(f"{i+1}) {pwd} (MASTER PASSWORD)")
+                print(f"{i+1}) {decrypted_pwd} (MASTER PASSWORD)")
                 decrypted_passlist.append(decrypted_pwd)
             except Exception:
                 print(f"{i+1}) {pwd} (MASTER PASSWORD)")
