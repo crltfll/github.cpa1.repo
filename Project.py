@@ -35,6 +35,10 @@ Update log:
             - Updated the viewSavedPass() to use the masterpassword()
 (18/03/25)  - fixed the masterpassword() and viewSavedPass()-related errors; made try-except blocks to handle exceptions
             - added helperfunction for viewSavedPass(): showPassOpt() for readability and efficiency
+(19/03/25)  - added cryptography module Fernet for encryptions and decryptions; fixes outlined below
+            - helper functions genKey and loadKey made for key generation and loading at every single time the program opens
+            - helper functions encryptPass and decryptPass for encryption and decryption, respectively
+            - savePassword, viewSavedPass, and masterpassword functions modified to include helper functions' outputs
            
 """
 
@@ -42,6 +46,7 @@ from random import *
 import string
 import pyperclip
 import os
+from cryptography.fernet import Fernet as fnt
 
 def clearScreen():
     '''
@@ -103,17 +108,47 @@ def getStrongPass(length, upper_use=True, num_use=True, spec_use=True):
     
     return shuffled_password
 
+def genKey():
+    '''
+    Generates a fernet key to be used for encrypting and decrypting passwords
+    '''
+    key = fnt.generate_key()
+    with open("secret.key",'wb') as keyfile:
+        keyfile.write(key)
+
+def loadKey():
+    '''
+    Loads the created key into the program by reading it
+    '''
+    return open('secret.key', 'rb').read()
+
+def encryptPass(password, key):
+    '''
+    Using Fernet cryptography, this function encrypts passwords with a generated key (see genkey and loadkey)
+    '''
+    ferkey = fnt(key)
+    encrypted_pass = ferkey.encrypt(password.encode())
+    return encrypted_pass
+
+def decryptPass(encrypted_pass, key):
+    ferkey = fnt(key)
+    decrypted_pass = ferkey.decrypt(encrypted_pass).decode()
+    return decrypted_pass
+
+
 def savePassword(password):
     '''
-    Saves password to a text file, currently very bare-bones, and will be redone soon.
+    Saves password to a text file, now has encryption features and secure storage.
     '''
     file_path = 'Password list.txt'
+    key = loadKey()
+    encrypted_pass = encryptPass(password, key)
     try:
         # First check if file exists and has a master password
         try:
             with open(file_path, 'r') as file:
                 lines = file.readlines()
-                # If file exists but is empty or just has newlines, initialize it
+                # If file exists but is empty, initialize it
                 if not lines or all(line.strip() == '' for line in lines):
                     with open(file_path, 'w') as new_file:
                         new_file.write("NO_MASTER_PASSWORD\n")
@@ -126,7 +161,7 @@ def savePassword(password):
         
         # Now append the password
         with open(file_path, 'a') as file:
-            file.write(f"{password}\n")
+            file.write(f"{encrypted_pass.decode()}\n") # Uses encrypted_pass here for storage
         print("Password has been saved successfully!")
     except IOError as exc:
         print(f"Error saving password: {exc}")
@@ -139,6 +174,9 @@ def masterpassword(password):
     Sets a password as the master password to access the password file.
     '''
     file_path = 'Password list.txt'
+    key = loadKey()
+    encrypted_pass = encryptPass(password, key)
+
     
     while True:
         mresponse = input("Do you wish to save this as your master password?\nWARNING: Make sure to save it somewhere secure (Y/N): ").upper()
@@ -150,11 +188,11 @@ def masterpassword(password):
                     all_lines = file.readlines()
                 
                 # Create new content with the new master password as the first line
-                new_content = [f"{password}\n"]
+                new_content = [f"{encrypted_pass.decode()}\n"]
                 
                 
                 for line in all_lines[1:]:  
-                    if line.strip() != password:  
+                    if line.strip() != encrypted_pass.decode():  
                         new_content.append(line)
                 
                 # Write back to file
@@ -182,7 +220,7 @@ def viewSavedPass():
     Allows viewing of the saved passwords with proper master password authentication.
     '''
     file_path = 'Password list.txt'
-    
+    key = loadKey()
     try:
         # Check if the password file exists
         with open(file_path, 'r') as file:
@@ -195,6 +233,18 @@ def viewSavedPass():
                 print("No passwords found in the file.")
                 input("Press Enter to continue...")
                 return
+            
+            decrypted_passwords = []
+            for pwds in all_passwords:
+                if pwds == "NO_MASTER_PASSWORD":
+                    decrypted_passwords.append(pwds)
+                else:
+                    try:
+                        decrypted_passwords.append(decryptPass(pwds, key))
+                    except Exception as exc:
+                        print(f"Error decrypting password. {exc}")
+                        decrypted_passwords.append("[Failed Decryption]")
+            
             
             # Get the master password (first line)
             master_pwd = all_passwords[0]
