@@ -266,7 +266,7 @@ def viewSavedPass():
             while attempt_count < max_attempts:
                 login = input("Please input master password: ")
                 
-                if login == (master_pwd, key):
+                if login == decryptPass(master_pwd, key):
                     print("Authentication successful!")
                     showPassOpt(all_passwords)
                     return
