@@ -42,7 +42,8 @@ Update log:
             - savePassword(), viewSavedPass(), and masterpassword() functions modified to include helper functions' outputs
             - included showPassOpt() as the function needing encryption/decryption helper functions
             - Updated help display screen to include installer instructions for modules and libraries needed
-
+(22/03/25)  - Fixed bugs regarding setups of master passwords within the saved passwords, and strength test functions
+            - Working program as of March 22, 2025 (V1)
            
 """
 
