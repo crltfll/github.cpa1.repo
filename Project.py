@@ -89,7 +89,7 @@ def getStrongPass(length, upper_use=True, num_use=True, spec_use=True):
     if spec_use and length > len(password):
         password += choice(specials)
     
-    
+
     if length > len(password):
         password += choice(letters_lower)
     
@@ -389,15 +389,16 @@ def testStrength(stringinp):
         elif char in specs:
             specheck = True
     
-    if not (upcheck or digcheck or specheck):
-        print(passwordStrength[1])
-    elif (digcheck or upcheck):
-        print(passwordStrength[2])
-    elif (digcheck and upcheck and specheck):
+    if (digcheck and upcheck and specheck):
         if len(stringinp) >= 15:
             print(passwordStrength[3])
         else:
             print(passwordStrength[4])
+    elif (digcheck or upcheck):
+        print(passwordStrength[2])
+    elif not (upcheck or digcheck or specheck):
+        print(passwordStrength[1])
+    
 
 def customizePass():
     '''
