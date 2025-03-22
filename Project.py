@@ -291,7 +291,7 @@ def showPassOpt(all_passwords):
     key = loadKey()
     print("\nHere are your saved passwords:")
 
-    decrypted_passlist =[] 
+    decrypted_passlist = []
     
     # Display passwords with indexed nums
     for i, pwd in enumerate(all_passwords):
@@ -303,9 +303,10 @@ def showPassOpt(all_passwords):
                 decrypted_passlist.append(decrypted_pwd)
             except Exception:
                 print(f"{i+1}) {pwd} (MASTER PASSWORD)")
+                decrypted_passlist.append(pwd)
         elif i == 0 and pwd == "NO_MASTER_PASSWORD":
             print(f"{i+1}) No master password set")
-            decrypted_passlist.append(decrypted_pwd)
+            decrypted_passlist.append("NO_MASTER_PASSWORD")
         else:
             try:
                 decrypted_pwd = decryptPass(pwd, key)
@@ -313,7 +314,7 @@ def showPassOpt(all_passwords):
                 decrypted_passlist.append(decrypted_pwd)
             except Exception:
                 print(f"{i+1}) [Encrypted]")
-                decrypted_passlist.append(decrypted_pwd)
+                decrypted_passlist.append(pwd)
     
     print("\n1) Set New Master Password")
     print("2) Return to Main Menu")
@@ -335,8 +336,8 @@ def showPassOpt(all_passwords):
                     if pwd_index == 1:
                         print("You cannot select the current master password. Please pick again.")
                     elif 2 <= pwd_index <= len(all_passwords):
-                        # Use the selected password as new master password
-                        selected_password = all_passwords[pwd_index - 1]
+                        # Use the selected decrypted password as new master password
+                        selected_password = decrypted_passlist[pwd_index - 1]
                         masterpassword(selected_password)
                         return
                     else:
