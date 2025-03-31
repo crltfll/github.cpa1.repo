@@ -15,6 +15,5 @@ Final Project is a **Password Manager** that:
   - Checks the generated password, or a user input password, based on:
     - length
     - character diversity
-    - word appearances or lack thereof
 
 - Saves passwords generated to an encrypted file using Fernet encryption (cryptography.fernet)
