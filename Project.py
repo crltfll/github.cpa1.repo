@@ -351,7 +351,7 @@ def showPassOpt(all_passwords):
         
         elif choice == '2':
             try:
-                pwd_index_copy = int(input(f"\nEnter a number between 1 and {len(all_passwords)} to select a password as your new master password: "))
+                pwd_index_copy = int(input(f"\nEnter a number between 1 and {len(all_passwords)} to select a password to copy: "))
                 if 1 <= pwd_index_copy <= len(all_passwords):
                     selected_password_copy = decrypted_passlist[pwd_index_copy - 1]
                     copyPass(selected_password_copy)
