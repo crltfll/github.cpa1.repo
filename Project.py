@@ -224,6 +224,7 @@ def viewSavedPass():
     '''
     Allows viewing of the saved passwords with proper master password authentication.
     '''
+    clearScreen()
     file_path = 'Password list.txt'
     key = loadKey()
     try:
@@ -460,7 +461,7 @@ def displayHelp():
         ----------------------------------Title Menu Options----------------------------------
         Generate Custom Pass - generates your password based on your selections later seen.
         View Saved Passwords - fetches your encrypted passwords made and generated here.
-        Test Password Strength - tests the strength of your generated password.
+        Test Password Strength - tests the strength of your generated password (input if none).
         ----------------------------------Main Menu Options-----------------------------------
         Save Password - saves generated passwords and encrypts them.
         Set Master Password - sets the master password as the current generated password.
@@ -473,6 +474,7 @@ def displayHelp():
     )
     input("\n Please enter any key to return...")
     if generated:
+        clearScreen()
         insidemain()
     else:
         clearScreen()
@@ -561,6 +563,8 @@ __|__]|__|[__ [__ | | ||  ||__/|  \   | __|___|\ ||___|__/|__| | |  ||__/__
         elif selection == '3':
             if generated:
                 testStrength(generated)
+                input("Press any key to continue...")
+                clearScreen()
             else:
                 selfpass = input("Please type your password as one string: ")
                 testStrength(selfpass)
