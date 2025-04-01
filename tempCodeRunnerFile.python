@@ -1,2 +1,0 @@
-F = lambda x, y: x ** y
-print(F(2, 3))
