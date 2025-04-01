@@ -279,6 +279,7 @@ def viewSavedPass():
                     else:
                         print("Maximum login attempts exceeded.")
                         input("Press Enter to continue...")
+                        clearScreen()
                         return
                     
     except FileNotFoundError:
@@ -318,10 +319,11 @@ def showPassOpt(all_passwords):
                 decrypted_passlist.append(pwd)
     
     print("\n1) Set New Master Password")
-    print("2) Return to Main Menu")
+    print("2) Copy a Password")
+    print("3) Return to Main Menu")
     
     while True:
-        choice = input("\nEnter your choice (1-2): ")
+        choice = input("\nEnter your choice (1-3): ")
         
         if choice == '1':
             # Set a new master password
@@ -347,6 +349,17 @@ def showPassOpt(all_passwords):
                     print("Please enter a valid number.")
         
         elif choice == '2':
+            try:
+                pwd_index_copy = int(input(f"\nEnter a number between 1 and {len(all_passwords)} to select a password as your new master password: "))
+                if 1 <= pwd_index_copy <= len(all_passwords):
+                    selected_password_copy = decrypted_passlist[pwd_index_copy - 1]
+                    copyPass(selected_password_copy)
+                    return
+                else:
+                    print(f"Invalid choice. Please enter a number between 1 and {len(all_passwords)}.")
+            except ValueError:
+                print("Please enter a valid number.")
+        elif choice == '3':
             return
         
         else:
@@ -500,7 +513,7 @@ def insidemain():
         elif select_loop == '5' and generated:
             copyPass(generated)
             input("Press Enter to continue...")
-            clearScreen()
+            
         elif select_loop == '6' and generated:
            testStrength(generated)
            input("Press Enter to continue...")
@@ -513,6 +526,8 @@ def insidemain():
             exit()
         elif not generated:
             print("Please generate a password first!")
+        else:
+            print("Please try again, pick from the numbers.")
 
 def main():
     title_ascii = r"""
@@ -547,7 +562,8 @@ __|__]|__|[__ [__ | | ||  ||__/|  \   | __|___|\ ||___|__/|__| | |  ||__/__
             if generated:
                 testStrength(generated)
             else:
-                print("Please generate a password first!")
+                selfpass = input("Please type your password as one string: ")
+                testStrength(selfpass)
                 input("Press any key to continue...")
                 clearScreen()
         elif selection == '4':
