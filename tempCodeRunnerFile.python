@@ -1,0 +1,13 @@
+def validatesubsequence(arr1, arr2):
+    for i in arr2:
+        trueValue = True
+        if i not in arr1:
+            trueValue = False
+            break
+    return trueValue
+
+
+array1 = [5, 1, 22, 25, 6, -1, 8, 10]
+array2 = [1, 6, -1, 10]
+
+validatesubsequence(array1, array2)

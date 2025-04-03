@@ -44,14 +44,47 @@ Update log:
             - Updated help display screen to include installer instructions for modules and libraries needed
 (22/03/25)  - Fixed bugs regarding setups of master passwords within the saved passwords, and strength test functions
             - Working program as of March 22, 2025 (V1)
-           
+(31/03/25)& - Fixed minor bugs in clearScreen use, added copy features to the saved password menu
+(03/04/25)  - Patched prerequisite requirements, now installs cryptography and pyperclip automatically.            
 """
 
 from random import *
 import string
-import pyperclip
+# import pyperclip
 import os
-from cryptography.fernet import Fernet as fnt
+import sys
+import subprocess
+# from cryptography.fernet import Fernet as fnt
+
+def moduleCheck(modname):
+    '''
+    Checks Python interpreter/environment for specific modules (modname)
+    '''
+    import importlib.util
+    return importlib.util.find_spec(modname) is not None
+
+def installModules():
+    '''
+    Automatically installs Python modules needed for this project; returns boolean True/False for installation, from our lord and savior StackOverflow
+    '''
+    modules_reqd = ['cryptography', 'pyperclip']
+    installedCheck = True
+
+    for module in modules_reqd:
+        if not moduleCheck(module):
+            print(f"Module not found. Now installing {module}, please wait...")
+            try:
+                subprocess.check_call(
+                    [sys.executable, "-m", 'pip', 'install', '-q', module],
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL
+                )
+                print(f"Successfully installed {module}.")
+            except subprocess.CalledProcessError:
+                print(f"Failed to install {module}. Please install it manually, using pip install {module}")
+                installedCheck = False
+    return installedCheck
+
 
 def clearScreen():
     '''
@@ -466,8 +499,9 @@ def displayHelp():
         Save Password - saves generated passwords and encrypts them.
         Set Master Password - sets the master password as the current generated password.
         Copy Password to Clipboard - Copies your password to the clipboard, use Ctrl+V to paste.
-        ------------------------------------Prerequisites-------------------------------------
-        In running this program, please run the following codes on your terminal:
+        ------------------------------------Error Checking-------------------------------------
+        If you encounter problems at running this program's features, 
+        please run the following codes on your terminal:
         pip install cryptography
         pip install pyperclip
         """
@@ -532,6 +566,15 @@ def insidemain():
             print("Please try again, pick from the numbers.")
 
 def main():
+    
+    if not installModules():
+        input("Modules are not installed. Press any key to exit.")
+        sys.exit(1)
+    global pyperclip, fnt
+    import pyperclip
+    from cryptography.fernet import Fernet as fnt
+
+
     title_ascii = r"""
   ___ _____________ _ ____________    _________  ________________________   
 __|__]|__|[__ [__ | | ||  ||__/|  \   | __|___|\ ||___|__/|__| | |  ||__/__ 
